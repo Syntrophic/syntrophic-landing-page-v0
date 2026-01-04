@@ -70,7 +70,7 @@ export const RetrievalAugmentedGenerationCard: React.FC = () => (
         </div>
       </div>
     }
-    title="Retrieval Augmented Generation"
+    title="Investment Agents"
     description="Enhance AI-powered information retrieval and generation by combining multiple data sources"
   />
 )

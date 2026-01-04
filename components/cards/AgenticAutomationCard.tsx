@@ -31,7 +31,7 @@ export const AgenticAutomationCard: React.FC = () => (
         </div>
       </div>
     }
-    title="Agentic Automation"
+    title="A2H and A2A Interaction"
     description="Empower your workflows with intelligent, autonomous agents that adapt and evolve"
   />
 )

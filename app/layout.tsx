@@ -11,7 +11,12 @@ const spaceGrotesk = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: "Syntrophic",
-  description: "The Coordination Layer for Capital Allocation: Syntrophic is a multi-agent networking and investment platform for VCs and founders",
+  description:
+    "The Coordination Layer for Capital Allocation: Syntrophic is a multi-agent networking and investment platform for VCs and founders",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
     generator: 'v0.app'
 }
 
@@ -22,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${spaceGrotesk.variable}`}>
-      <body className={`font-sans`}>{children}</body>
+      <body className={`font-sans min-h-screen bg-black`}>{children}</body>
     </html>
   )
 }

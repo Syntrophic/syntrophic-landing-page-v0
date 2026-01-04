@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Typewriter from "typewriter-effect"
 import { FeatureCards } from "../components/FeatureCards"
 import FlickeringGrid from "@/components/flickering-grid"
+import { Footer } from "@/components/Footer"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -13,9 +14,9 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="h-screen overflow-y-scroll snap-y snap-mandatory">
-      <main className="min-h-screen w-full bg-black text-white relative">
-        <section className="h-screen flex items-center justify-center relative overflow-hidden snap-start">
+    <div className="min-h-screen flex flex-col bg-black">
+      <main className="flex-1 w-full text-white">
+        <section className="h-screen flex items-center justify-center relative overflow-hidden">
           <FlickeringGrid
             className="absolute inset-0 z-0"
             color="rgb(255, 255, 255)"
@@ -24,10 +25,10 @@ export default function Home() {
             gridGap={5}
             flickerChance={0.2}
           />
-          <div className="max-w-6xl mx-auto text-center relative z-10">
+          <div className="max-w-6xl mx-auto px-4 md:px-6 text-center relative z-10 w-full">
             <div className="relative">
               <div className="inline-block">
-                <img src="/logo.png" alt="Syntrophic Logo" className="h-40 w-40 mx-auto mb-6 object-contain" />
+                <img src="/logo.png" alt="Syntrophic Logo" className="h-56 w-56 mx-auto mb-4 object-contain" />
                 <h1 className="relative text-5xl md:text-7xl font-medium mb-8 tracking-tight text-white text-glow">
                   {mounted && (
                     <Typewriter
@@ -52,7 +53,7 @@ export default function Home() {
           <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
             <button
               onClick={() => {
-                document.querySelector(".snap-y")?.scrollTo({
+                window.scrollBy({
                   top: window.innerHeight,
                   behavior: "smooth",
                 })
@@ -75,7 +76,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="min-h-screen py-20 px-4 md:px-6 snap-start bg-black">
+        <section className="min-h-screen py-20 px-4 md:px-6">
           <div className="max-w-7xl mx-auto">
             <div className="mb-12 text-center">
               <h2 className="text-2xl md:text-3xl text-white font-mono">Our Focus</h2>
@@ -85,6 +86,8 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      <Footer />
       <style jsx>{`
         .text-glow {
           text-shadow: 0 0 10px rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 255, 255, 0.2), 0 0 30px rgba(255, 255, 255, 0.1);

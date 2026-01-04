@@ -196,7 +196,7 @@ export const AIEnabledKnowledgeBaseCard: React.FC = () => (
         </svg>
       </div>
     }
-    title="AI-Enabled Knowledge Graph"
+    title="Orchestration Intelligence"
     description="Harness the power of AI to create a dynamic, interconnected knowledge graph with real-time information flow"
   />
 )
