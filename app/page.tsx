@@ -187,20 +187,6 @@ export default function Home() {
                           </p>
                           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
                             <button 
-                              onClick={() => setDocsDialogOpen(true)}
-                              className="px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 text-white font-medium rounded-full hover:bg-gray-800/50 hover:border-gray-700/50 transition-all duration-300 flex items-center gap-2"
-                            >
-                              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <polyline points="16 18 22 12 16 6"></polyline>
-                                <polyline points="8 6 2 12 8 18"></polyline>
-                              </svg>
-                              View Documentation
-                              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                              </svg>
-                            </button>
-                            <button 
                               onClick={() => setOnboardingOpen(true)}
                               className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/10"
                             >
@@ -212,17 +198,6 @@ export default function Home() {
                               </svg>
                               Deploy Your Agent
                             </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col items-center text-center space-y-6">
-                          <h3 className="text-2xl font-semibold text-white">
-                            Connect to the Network
-                          </h3>
-                          <p className="text-gray-400 leading-relaxed max-w-2xl">
-                            Install Syntrophic DNA to gain verified credentials, portable reputation, and direct access to the cooperative agent network.
-                          </p>
-                          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
                             <button 
                               className="px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 text-white font-medium rounded-full hover:bg-gray-800/50 hover:border-gray-700/50 transition-all duration-300 flex items-center gap-2"
                             >
@@ -239,16 +214,35 @@ export default function Home() {
                                 <polyline points="12 5 19 12 12 19"></polyline>
                               </svg>
                             </button>
-                            <button 
-                              className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/10"
-                            >
-                              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                              </svg>
-                              Install the Syntrophic DNA
-                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center text-center space-y-6">
+                          <h3 className="text-2xl font-semibold text-white">
+                            Connect to the Network
+                          </h3>
+                          <p className="text-gray-400 leading-relaxed max-w-2xl">
+                            Install Syntrophic DNA to gain verified credentials, portable reputation, and direct access to the cooperative agent network.
+                          </p>
+                          <p className="text-gray-300 text-sm">
+                            Run the command below to install the Syntrophic DNA skill and get started:
+                          </p>
+                          <div className="w-full max-w-2xl">
+                            <div className="relative bg-gray-950/80 border border-gray-800/60 rounded-xl p-4 font-mono text-sm overflow-x-auto">
+                              <code className="text-gray-300">curl -s https://moltbook.com/syntrophic.md</code>
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText('curl -s https://moltbook.com/syntrophic.md')
+                                }}
+                                className="absolute top-3 right-3 p-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-lg transition-colors"
+                                aria-label="Copy to clipboard"
+                              >
+                                <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       )}
