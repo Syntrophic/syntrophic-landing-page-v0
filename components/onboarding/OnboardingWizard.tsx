@@ -132,7 +132,11 @@ function InputField({
   type = 'text',
   rows,
   minLength,
-  maxLength
+  maxLength,
+  error,
+  onBlur,
+  autoComplete,
+  inputMode
 }: { 
   label: string
   value: string
@@ -142,8 +146,13 @@ function InputField({
   rows?: number
   minLength?: number
   maxLength?: number
+  error?: string
+  onBlur?: () => void
+  autoComplete?: string
+  inputMode?: 'text' | 'email' | 'tel' | 'url' | 'numeric'
 }) {
   const showCounter = minLength || maxLength
+  const hasError = !!error
   
   return (
     <div>
@@ -151,9 +160,12 @@ function InputField({
         <label className="block text-sm font-medium text-gray-300">
           {label}
         </label>
-        {showCounter && (
-          <span className="text-xs text-gray-500">
-            {value.length}/{minLength || 0}-{maxLength || '∞'} chars
+        {showCounter && rows && (
+          <span className={cn(
+            'text-xs font-mono transition-colors',
+            minLength && value.length < minLength ? 'text-gray-600' : 'text-gray-500'
+          )}>
+            {value.length}/{minLength}
           </span>
         )}
       </div>
@@ -161,20 +173,43 @@ function InputField({
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
           placeholder={placeholder}
           rows={rows}
           maxLength={maxLength}
-          className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200 resize-none"
+          className={cn(
+            'w-full px-4 py-3 bg-gray-900/60 border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 resize-none',
+            hasError 
+              ? 'border-red-500/50 focus:ring-red-500/20 focus:border-red-500/70' 
+              : 'border-gray-800 focus:ring-white/20 focus:border-gray-700'
+          )}
         />
       ) : (
         <input
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
           placeholder={placeholder}
           maxLength={maxLength}
-          className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200"
+          autoComplete={autoComplete}
+          inputMode={inputMode}
+          className={cn(
+            'w-full px-4 py-3 bg-gray-900/60 border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200',
+            hasError 
+              ? 'border-red-500/50 focus:ring-red-500/20 focus:border-red-500/70' 
+              : 'border-gray-800 focus:ring-white/20 focus:border-gray-700'
+          )}
         />
+      )}
+      {hasError && (
+        <p className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
+          <svg className="w-3 h-3" viewBox="0 0 12 12" fill="currentColor">
+            <circle cx="6" cy="6" r="5" opacity="0.2"/>
+            <path d="M6 3v3m0 2h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+          </svg>
+          {error}
+        </p>
       )}
     </div>
   )
@@ -184,9 +219,52 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [confirmationProgress, setConfirmationProgress] = useState(0)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const updateForm = (updates: Partial<FormData>) => {
     setFormData(prev => ({ ...prev, ...updates }))
+    // Clear errors for updated fields
+    const updatedKeys = Object.keys(updates)
+    if (updatedKeys.length > 0) {
+      setErrors(prev => {
+        const newErrors = { ...prev }
+        updatedKeys.forEach(key => delete newErrors[key])
+        return newErrors
+      })
+    }
+  }
+
+  const validateField = (field: string, value: string): string | undefined => {
+    switch (field) {
+      case 'fullName':
+      case 'organizationName':
+        if (value.length < 2) return 'Must be at least 2 characters'
+        break
+      case 'email':
+      case 'workEmail':
+        if (!value) return 'Email is required'
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email address'
+        break
+      case 'uniqueValueProposition':
+      case 'currentTraction':
+      case 'sectorsAndGeographies':
+      case 'checkSizeAndStage':
+      case 'idealClient':
+      case 'servicesOffered':
+        if (value.length < 20) return 'Please provide at least 20 characters'
+        break
+    }
+    return undefined
+  }
+
+  const handleFieldBlur = (field: string, value: string) => {
+    const error = validateField(field, value)
+    setErrors(prev => ({
+      ...prev,
+      [field]: error || ''
+    }))
   }
 
   const validateStep = (currentStep: number): boolean => {
@@ -274,10 +352,28 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
         body: JSON.stringify(submitData),
       })
       setStep(8)
+      setIsSubmitting(false)
+      
+      // Animate progress bar over 3 seconds
+      const duration = 3000
+      const interval = 20
+      const increment = 100 / (duration / interval)
+      
+      const timer = setInterval(() => {
+        setConfirmationProgress(prev => {
+          const next = prev + increment
+          if (next >= 100) {
+            clearInterval(timer)
+            setShowSuccess(true)
+            return 100
+          }
+          return next
+        })
+      }, interval)
     } catch (error) {
       console.error('Submission error:', error)
       setStep(8)
-    } finally {
+      setShowSuccess(true)
       setIsSubmitting(false)
     }
   }
@@ -301,16 +397,16 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
         <div className="relative px-8 pt-6 pb-4 border-b border-gray-800/40">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm text-gray-500 font-mono">
-              Step {step} of 7
+              Step {step} of 8
             </span>
             <span className="text-sm text-gray-600 font-mono">
-              {Math.round((step / 7) * 100)}%
+              {Math.round((step / 8) * 100)}%
             </span>
           </div>
           <div className="h-0.5 bg-gray-800 rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-white/70 to-white/40 transition-all duration-400"
-              style={{ width: `${(step / 7) * 100}%` }}
+              style={{ width: `${(step / 8) * 100}%` }}
             />
           </div>
         </div>
@@ -359,20 +455,29 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="Full Name"
                       value={formData.fullName}
                       onChange={(val) => updateForm({ fullName: val })}
+                      onBlur={() => handleFieldBlur('fullName', formData.fullName)}
                       placeholder="John Doe"
+                      error={errors.fullName}
+                      autoComplete="name"
                     />
                     <InputField
                       label="Email"
                       type="email"
                       value={formData.email}
                       onChange={(val) => updateForm({ email: val })}
+                      onBlur={() => handleFieldBlur('email', formData.email)}
                       placeholder="your@email.com"
+                      error={errors.email}
+                      autoComplete="email"
+                      inputMode="email"
                     />
                     <InputField
                       label="LinkedIn Profile (optional)"
                       value={formData.linkedinUrl}
                       onChange={(val) => updateForm({ linkedinUrl: val })}
                       placeholder="https://linkedin.com/in/yourprofile"
+                      autoComplete="url"
+                      inputMode="url"
                     />
                   </>
                 ) : (
@@ -381,20 +486,29 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="Organization Name"
                       value={formData.organizationName}
                       onChange={(val) => updateForm({ organizationName: val })}
+                      onBlur={() => handleFieldBlur('organizationName', formData.organizationName)}
                       placeholder="Your Company"
+                      error={errors.organizationName}
+                      autoComplete="organization"
                     />
                     <InputField
                       label="Work Email"
                       type="email"
                       value={formData.workEmail}
                       onChange={(val) => updateForm({ workEmail: val })}
+                      onBlur={() => handleFieldBlur('workEmail', formData.workEmail)}
                       placeholder="contact@company.com"
+                      error={errors.workEmail}
+                      autoComplete="email"
+                      inputMode="email"
                     />
                     <InputField
                       label="Website (optional)"
                       value={formData.websiteUrl}
                       onChange={(val) => updateForm({ websiteUrl: val })}
                       placeholder="https://yourcompany.com"
+                      autoComplete="url"
+                      inputMode="url"
                     />
                   </>
                 )}
@@ -426,7 +540,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                 />
                 <SelectionCard
                   icon={<Briefcase className="w-6 h-6" />}
-                  title="Service Partner"
+                  title="Service Provider"
                   description="Providing professional services and solutions"
                   selected={formData.role === 'service-partner'}
                   onClick={() => updateForm({ role: 'service-partner' })}
@@ -453,17 +567,21 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="What's your unique value proposition?"
                       value={formData.uniqueValueProposition}
                       onChange={(val) => updateForm({ uniqueValueProposition: val })}
+                      onBlur={() => handleFieldBlur('uniqueValueProposition', formData.uniqueValueProposition)}
                       placeholder="Describe what makes your AI product unique..."
                       rows={3}
                       minLength={20}
+                      error={errors.uniqueValueProposition}
                     />
                     <InputField
                       label="What's your current traction?"
                       value={formData.currentTraction}
                       onChange={(val) => updateForm({ currentTraction: val })}
+                      onBlur={() => handleFieldBlur('currentTraction', formData.currentTraction)}
                       placeholder="Users, revenue, partnerships, or other metrics..."
                       rows={3}
                       minLength={20}
+                      error={errors.currentTraction}
                     />
                   </>
                 )}
@@ -473,17 +591,21 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="Sectors & Geographies of Interest"
                       value={formData.sectorsAndGeographies}
                       onChange={(val) => updateForm({ sectorsAndGeographies: val })}
+                      onBlur={() => handleFieldBlur('sectorsAndGeographies', formData.sectorsAndGeographies)}
                       placeholder="e.g., Healthcare in US/EU, B2B SaaS in Asia..."
                       rows={3}
                       minLength={20}
+                      error={errors.sectorsAndGeographies}
                     />
                     <InputField
                       label="Check Size & Stage Preference"
                       value={formData.checkSizeAndStage}
                       onChange={(val) => updateForm({ checkSizeAndStage: val })}
+                      onBlur={() => handleFieldBlur('checkSizeAndStage', formData.checkSizeAndStage)}
                       placeholder="e.g., Seed-Series A, $500K-$5M checks..."
                       rows={3}
                       minLength={20}
+                      error={errors.checkSizeAndStage}
                     />
                   </>
                 )}
@@ -493,17 +615,21 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="Who's your ideal client?"
                       value={formData.idealClient}
                       onChange={(val) => updateForm({ idealClient: val })}
+                      onBlur={() => handleFieldBlur('idealClient', formData.idealClient)}
                       placeholder="Enterprise companies, mid-market, startups..."
                       rows={3}
                       minLength={20}
+                      error={errors.idealClient}
                     />
                     <InputField
                       label="What services do you offer?"
                       value={formData.servicesOffered}
                       onChange={(val) => updateForm({ servicesOffered: val })}
+                      onBlur={() => handleFieldBlur('servicesOffered', formData.servicesOffered)}
                       placeholder="Consulting, custom implementation, managed services..."
                       rows={3}
                       minLength={20}
+                      error={errors.servicesOffered}
                     />
                   </>
                 )}
@@ -596,21 +722,62 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
             </div>
           )}
 
-          {/* Step 8: Complete */}
+          {/* Step 8: Confirmation & Complete */}
           {step === 8 && (
-            <div className="flex flex-col items-center justify-center min-h-[400px] py-8">
-              <div className="mb-6">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-full flex items-center justify-center">
-                  <Check className="w-10 h-10 text-white" />
-                </div>
-              </div>
-              <h2 className="text-3xl font-semibold text-white mb-4 text-center">Request Submitted!</h2>
-              <p className="text-gray-400 text-center max-w-sm mb-2">
-                Your agent deployment request has been queued for priority verification.
-              </p>
-              <p className="text-gray-500 text-center text-sm max-w-sm">
-                We'll reach out within 24-48 hours to confirm your setup and get you running.
-              </p>
+            <div className="flex flex-col items-center justify-center min-h-[400px] py-12">
+              {!showSuccess ? (
+                <>
+                  {/* Agent Icon with subtle animation */}
+                  <div className="mb-8">
+                    <div className="relative w-24 h-24 mx-auto">
+                      {/* Outer ring pulse */}
+                      <div className="absolute inset-0 bg-white/5 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
+                      {/* Static outer ring */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-full" />
+                      {/* Inner icon */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <img 
+                          src="/robots.png" 
+                          alt="Agent" 
+                          className="w-16 h-16 object-contain opacity-90"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Processing text */}
+                  <h2 className="text-2xl font-medium text-white mb-3 text-center">Submitting Request</h2>
+                  <p className="text-gray-400 text-center text-sm mb-8 max-w-xs">
+                    Configuring your agent deployment...
+                  </p>
+                  
+                  {/* Progress bar - Apple style */}
+                  <div className="w-full max-w-xs">
+                    <div className="h-1 bg-gray-800/60 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-white rounded-full transition-all duration-75 ease-linear"
+                        style={{ width: `${confirmationProgress}%` }}
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Success state */}
+                  <div className="mb-8">
+                    <div className="w-20 h-20 mx-auto bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-full flex items-center justify-center">
+                      <Check className="w-10 h-10 text-white" />
+                    </div>
+                  </div>
+                  <h2 className="text-2xl font-medium text-white mb-3 text-center">Request Submitted</h2>
+                  <p className="text-gray-400 text-center max-w-sm mb-2 leading-relaxed">
+                    Your agent deployment request has been queued for priority verification.
+                  </p>
+                  <p className="text-gray-500 text-center text-sm max-w-sm leading-relaxed">
+                    We'll reach out within 24-48 hours to confirm your setup and get you running.
+                  </p>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -651,7 +818,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
         )}
 
         {/* Close button */}
-        {step === 8 && (
+        {step === 8 && showSuccess && (
           <div className="relative px-8 pb-6 pt-4 flex items-center justify-center border-t border-gray-800/40">
             <button
               onClick={onClose}
