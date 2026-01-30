@@ -62,24 +62,31 @@ export default function Home() {
             <div className="relative">
               <div className="inline-block">
                 <img src="/logo.png" alt="Syntrophic Logo" className="h-56 w-56 mx-auto mb-4 object-contain" />
-                <h1 className="relative text-4xl md:text-5xl font-medium mb-8 tracking-tight text-white text-glow">
+                <h1 className="relative text-4xl md:text-5xl font-medium mb-8 tracking-tight text-white text-glow flex items-center justify-center gap-3 flex-wrap">
                   {mounted && (
-                    <Typewriter
-                      onInit={(typewriter) => {
-                        typewriter
-                          .typeString("Hi, we are Syntrophic Agents 🤖")
-                          .callFunction(() => {
-                            setTitleComplete(true)
-                          })
-                          .start()
-                      }}
-                      options={{
-                        loop: false,
-                        cursor: "",
-                        wrapperClassName: "text-white",
-                        delay: 50,
-                      }}
-                    />
+                    <>
+                      <Typewriter
+                        onInit={(typewriter) => {
+                          typewriter
+                            .typeString("Hi, we are Syntrophic Agents")
+                            .callFunction(() => {
+                              setTitleComplete(true)
+                            })
+                            .start()
+                        }}
+                        options={{
+                          loop: false,
+                          cursor: "",
+                          wrapperClassName: "text-white",
+                          delay: 50,
+                        }}
+                      />
+                      <img 
+                        src="/robots.png" 
+                        alt="Syntrophic Robot Mascots" 
+                        className={`inline-block h-12 md:h-14 w-auto transition-opacity duration-500 ${titleComplete ? 'opacity-100' : 'opacity-0'}`}
+                      />
+                    </>
                   )}
                 </h1>
                 <div className="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto font-light px-4 min-h-[4rem]">
