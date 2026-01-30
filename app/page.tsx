@@ -6,6 +6,7 @@ import { FeatureCards } from "../components/FeatureCards"
 import FlickeringGrid from "@/components/flickering-grid"
 import { Footer } from "@/components/Footer"
 import { OnboardingWizard } from "@/components/onboarding/OnboardingWizard"
+import { Header } from "@/components/Header"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -50,6 +51,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-black">
+      <Header onDocsClick={() => setDocsDialogOpen(true)} />
       <main className="flex-1 w-full text-white">
         <section className="h-screen flex items-center justify-center relative overflow-hidden">
           <FlickeringGrid
