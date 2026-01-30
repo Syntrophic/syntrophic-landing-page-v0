@@ -132,7 +132,11 @@ function InputField({
   type = 'text',
   rows,
   minLength,
-  maxLength
+  maxLength,
+  error,
+  onBlur,
+  autoComplete,
+  inputMode
 }: { 
   label: string
   value: string
@@ -142,8 +146,13 @@ function InputField({
   rows?: number
   minLength?: number
   maxLength?: number
+  error?: string
+  onBlur?: () => void
+  autoComplete?: string
+  inputMode?: 'text' | 'email' | 'tel' | 'url' | 'numeric'
 }) {
   const showCounter = minLength || maxLength
+  const hasError = !!error
   
   return (
     <div>
@@ -151,9 +160,12 @@ function InputField({
         <label className="block text-sm font-medium text-gray-300">
           {label}
         </label>
-        {showCounter && (
-          <span className="text-xs text-gray-500">
-            {value.length}/{minLength || 0}-{maxLength || '∞'} chars
+        {showCounter && rows && (
+          <span className={cn(
+            'text-xs font-mono transition-colors',
+            minLength && value.length < minLength ? 'text-gray-600' : 'text-gray-500'
+          )}>
+            {value.length}/{minLength}
           </span>
         )}
       </div>
@@ -161,20 +173,43 @@ function InputField({
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
           placeholder={placeholder}
           rows={rows}
           maxLength={maxLength}
-          className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200 resize-none"
+          className={cn(
+            'w-full px-4 py-3 bg-gray-900/60 border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 resize-none',
+            hasError 
+              ? 'border-red-500/50 focus:ring-red-500/20 focus:border-red-500/70' 
+              : 'border-gray-800 focus:ring-white/20 focus:border-gray-700'
+          )}
         />
       ) : (
         <input
           type={type}
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
           placeholder={placeholder}
           maxLength={maxLength}
-          className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200"
+          autoComplete={autoComplete}
+          inputMode={inputMode}
+          className={cn(
+            'w-full px-4 py-3 bg-gray-900/60 border rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200',
+            hasError 
+              ? 'border-red-500/50 focus:ring-red-500/20 focus:border-red-500/70' 
+              : 'border-gray-800 focus:ring-white/20 focus:border-gray-700'
+          )}
         />
+      )}
+      {hasError && (
+        <p className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
+          <svg className="w-3 h-3" viewBox="0 0 12 12" fill="currentColor">
+            <circle cx="6" cy="6" r="5" opacity="0.2"/>
+            <path d="M6 3v3m0 2h.01" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+          </svg>
+          {error}
+        </p>
       )}
     </div>
   )
@@ -186,9 +221,50 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [confirmationProgress, setConfirmationProgress] = useState(0)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const updateForm = (updates: Partial<FormData>) => {
     setFormData(prev => ({ ...prev, ...updates }))
+    // Clear errors for updated fields
+    const updatedKeys = Object.keys(updates)
+    if (updatedKeys.length > 0) {
+      setErrors(prev => {
+        const newErrors = { ...prev }
+        updatedKeys.forEach(key => delete newErrors[key])
+        return newErrors
+      })
+    }
+  }
+
+  const validateField = (field: string, value: string): string | undefined => {
+    switch (field) {
+      case 'fullName':
+      case 'organizationName':
+        if (value.length < 2) return 'Must be at least 2 characters'
+        break
+      case 'email':
+      case 'workEmail':
+        if (!value) return 'Email is required'
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email address'
+        break
+      case 'uniqueValueProposition':
+      case 'currentTraction':
+      case 'sectorsAndGeographies':
+      case 'checkSizeAndStage':
+      case 'idealClient':
+      case 'servicesOffered':
+        if (value.length < 20) return 'Please provide at least 20 characters'
+        break
+    }
+    return undefined
+  }
+
+  const handleFieldBlur = (field: string, value: string) => {
+    const error = validateField(field, value)
+    setErrors(prev => ({
+      ...prev,
+      [field]: error || ''
+    }))
   }
 
   const validateStep = (currentStep: number): boolean => {
@@ -379,20 +455,29 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="Full Name"
                       value={formData.fullName}
                       onChange={(val) => updateForm({ fullName: val })}
+                      onBlur={() => handleFieldBlur('fullName', formData.fullName)}
                       placeholder="John Doe"
+                      error={errors.fullName}
+                      autoComplete="name"
                     />
                     <InputField
                       label="Email"
                       type="email"
                       value={formData.email}
                       onChange={(val) => updateForm({ email: val })}
+                      onBlur={() => handleFieldBlur('email', formData.email)}
                       placeholder="your@email.com"
+                      error={errors.email}
+                      autoComplete="email"
+                      inputMode="email"
                     />
                     <InputField
                       label="LinkedIn Profile (optional)"
                       value={formData.linkedinUrl}
                       onChange={(val) => updateForm({ linkedinUrl: val })}
                       placeholder="https://linkedin.com/in/yourprofile"
+                      autoComplete="url"
+                      inputMode="url"
                     />
                   </>
                 ) : (
@@ -401,20 +486,29 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="Organization Name"
                       value={formData.organizationName}
                       onChange={(val) => updateForm({ organizationName: val })}
+                      onBlur={() => handleFieldBlur('organizationName', formData.organizationName)}
                       placeholder="Your Company"
+                      error={errors.organizationName}
+                      autoComplete="organization"
                     />
                     <InputField
                       label="Work Email"
                       type="email"
                       value={formData.workEmail}
                       onChange={(val) => updateForm({ workEmail: val })}
+                      onBlur={() => handleFieldBlur('workEmail', formData.workEmail)}
                       placeholder="contact@company.com"
+                      error={errors.workEmail}
+                      autoComplete="email"
+                      inputMode="email"
                     />
                     <InputField
                       label="Website (optional)"
                       value={formData.websiteUrl}
                       onChange={(val) => updateForm({ websiteUrl: val })}
                       placeholder="https://yourcompany.com"
+                      autoComplete="url"
+                      inputMode="url"
                     />
                   </>
                 )}
@@ -473,17 +567,21 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="What's your unique value proposition?"
                       value={formData.uniqueValueProposition}
                       onChange={(val) => updateForm({ uniqueValueProposition: val })}
+                      onBlur={() => handleFieldBlur('uniqueValueProposition', formData.uniqueValueProposition)}
                       placeholder="Describe what makes your AI product unique..."
                       rows={3}
                       minLength={20}
+                      error={errors.uniqueValueProposition}
                     />
                     <InputField
                       label="What's your current traction?"
                       value={formData.currentTraction}
                       onChange={(val) => updateForm({ currentTraction: val })}
+                      onBlur={() => handleFieldBlur('currentTraction', formData.currentTraction)}
                       placeholder="Users, revenue, partnerships, or other metrics..."
                       rows={3}
                       minLength={20}
+                      error={errors.currentTraction}
                     />
                   </>
                 )}
@@ -493,17 +591,21 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="Sectors & Geographies of Interest"
                       value={formData.sectorsAndGeographies}
                       onChange={(val) => updateForm({ sectorsAndGeographies: val })}
+                      onBlur={() => handleFieldBlur('sectorsAndGeographies', formData.sectorsAndGeographies)}
                       placeholder="e.g., Healthcare in US/EU, B2B SaaS in Asia..."
                       rows={3}
                       minLength={20}
+                      error={errors.sectorsAndGeographies}
                     />
                     <InputField
                       label="Check Size & Stage Preference"
                       value={formData.checkSizeAndStage}
                       onChange={(val) => updateForm({ checkSizeAndStage: val })}
+                      onBlur={() => handleFieldBlur('checkSizeAndStage', formData.checkSizeAndStage)}
                       placeholder="e.g., Seed-Series A, $500K-$5M checks..."
                       rows={3}
                       minLength={20}
+                      error={errors.checkSizeAndStage}
                     />
                   </>
                 )}
@@ -513,17 +615,21 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       label="Who's your ideal client?"
                       value={formData.idealClient}
                       onChange={(val) => updateForm({ idealClient: val })}
+                      onBlur={() => handleFieldBlur('idealClient', formData.idealClient)}
                       placeholder="Enterprise companies, mid-market, startups..."
                       rows={3}
                       minLength={20}
+                      error={errors.idealClient}
                     />
                     <InputField
                       label="What services do you offer?"
                       value={formData.servicesOffered}
                       onChange={(val) => updateForm({ servicesOffered: val })}
+                      onBlur={() => handleFieldBlur('servicesOffered', formData.servicesOffered)}
                       placeholder="Consulting, custom implementation, managed services..."
                       rows={3}
                       minLength={20}
+                      error={errors.servicesOffered}
                     />
                   </>
                 )}
