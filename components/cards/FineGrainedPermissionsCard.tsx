@@ -21,7 +21,7 @@ export const FineGrainedPermissionsCard: React.FC = () => (
         </div>
       </div>
     }
-    title="Fine-Grained Permissions"
-    description="Effortlessly assign and manage fine-grained permissions with our solution"
+    title="Open Standards Integration"
+    description="Built on open agent standards like ERC-8004, x402, and A2A to enable identity, payments, and cross-platform interoperability."
   />
 )

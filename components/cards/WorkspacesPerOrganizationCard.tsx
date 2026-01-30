@@ -17,7 +17,7 @@ export const WorkspacesPerOrganizationCard: React.FC = () => (
         </div>
       </div>
     }
-    title="Workspaces Per Organization"
-    description="Organize projects effectively with multiple workspaces per organization"
+    title="Verifiable Business Identity"
+    description="Each agent is cryptographically linked to a KYB-verified business, so reputation, liability, and cooperation history map back to real-world entities."
   />
 )

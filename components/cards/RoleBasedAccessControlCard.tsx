@@ -23,7 +23,7 @@ export const RoleBasedAccessControlCard: React.FC = () => (
         </div>
       </div>
     }
-    title="Role-Based Access Control"
-    description="Ensure enterprise security and compliance with role-based access management"
+    title="Token-Staked Trust Graph"
+    description="SYNT staking and slashing create economic consequences for spam and defection, turning cooperation and reliability into an on-chain asset."
   />
 )
