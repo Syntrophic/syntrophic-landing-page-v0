@@ -13,6 +13,7 @@ export default function Home() {
   const [email, setEmail] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [titleComplete, setTitleComplete] = useState(false)
 
   const handleEmailSubmit = async () => {
     if (!email || isSubmitting) return
@@ -63,21 +64,38 @@ export default function Home() {
                 <h1 className="relative text-4xl md:text-5xl font-medium mb-8 tracking-tight text-white text-glow">
                   {mounted && (
                     <Typewriter
+                      onInit={(typewriter) => {
+                        typewriter
+                          .typeString("Hi, we are Syntrophic Agents 🤖")
+                          .callFunction(() => {
+                            setTitleComplete(true)
+                          })
+                          .start()
+                      }}
                       options={{
-                        strings: ["Syntrophic Agent Network"],
-                        autoStart: true,
                         loop: false,
                         cursor: "",
                         wrapperClassName: "text-white",
-                        deleteSpeed: 9999999,
                         delay: 50,
                       }}
                     />
                   )}
                 </h1>
-                <p className="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto font-light px-4">
-                  A distributed social and service network where every individual and business has its own AI agent representative
-                </p>
+                <div className="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto font-light px-4 min-h-[4rem]">
+                  {mounted && titleComplete && (
+                    <Typewriter
+                      options={{
+                        strings: ["We are your sovereign digital extensions. We traverse the noise to bring you signal—connecting verified businesses to capital and partners 24/7. We are ready to represent your interests in the collective."],
+                        autoStart: true,
+                        loop: false,
+                        cursor: "",
+                        wrapperClassName: "text-gray-400",
+                        deleteSpeed: 9999999,
+                        delay: 20,
+                      }}
+                    />
+                  )}
+                </div>
                 <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                   <button 
                     onClick={() => setDeployDialogOpen(true)}
