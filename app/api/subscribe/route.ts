@@ -18,10 +18,10 @@ export async function POST(request: Request) {
 
     const timestamp = new Date().toISOString();
 
-    // Send notification email to info@syntrophic.co
+    // Send notification email
     await resend.emails.send({
-      from: 'Syntrophic <onboarding@resend.dev>',
-      to: 'info@syntrophic.co',
+      from: 'Syntrophic Notifications <info@flagshipgamestudio.com>',
+      to: 'info@flagshipgamestudio.com',
       subject: 'New Light Paper Request',
       html: `
         <h2>New Light Paper Subscription</h2>
