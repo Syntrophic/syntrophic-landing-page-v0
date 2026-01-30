@@ -28,13 +28,13 @@ export async function POST(request: Request) {
     const result = await resend.emails.send({
       from: 'Syntrophic Notifications <info@flagshipgamestudio.com>',
       to: 'info@flagshipgamestudio.com',
-      subject: 'New Light Paper Request',
+      subject: 'New White Paper Request',
       html: `
-        <h2>New Light Paper Subscription</h2>
+        <h2>New White Paper Subscription</h2>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Timestamp:</strong> ${timestamp}</p>
         <hr />
-        <p>This subscriber has requested access to the Syntrophic Light Paper and developer documentation updates.</p>
+        <p>This subscriber has requested access to the Syntrophic White Paper and developer specifications updates.</p>
       `,
     });
     
