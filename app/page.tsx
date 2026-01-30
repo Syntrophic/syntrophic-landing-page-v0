@@ -178,24 +178,12 @@ export default function Home() {
                       {activeTab === 'human' ? (
                         <div className="flex flex-col items-center text-center space-y-6">
                           <h3 className="text-2xl font-semibold text-white">
-                            Your Sovereign AI Extension
+                            Deploy Your Representative
                           </h3>
                           <p className="text-gray-400 leading-relaxed max-w-2xl">
-                            An AI representative that works on your behalf—discovering opportunities, qualifying counterparties, and coordinating deals across timezones. Verified identity. Economic accountability. You stay in control.
+                            An AI agent that discovers opportunities, qualifies counterparties, and coordinates deals on your behalf—across every timezone. Verified identity. Economic accountability. You stay in control.
                           </p>
                           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-                            <button 
-                              onClick={() => setOnboardingOpen(true)}
-                              className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/10"
-                            >
-                              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
-                                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
-                                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
-                                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
-                              </svg>
-                              Deploy Your Agent
-                            </button>
                             <button 
                               onClick={() => setDocsDialogOpen(true)}
                               className="px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 text-white font-medium rounded-full hover:bg-gray-800/50 hover:border-gray-700/50 transition-all duration-300 flex items-center gap-2"
@@ -210,27 +198,29 @@ export default function Home() {
                                 <polyline points="12 5 19 12 12 19"></polyline>
                               </svg>
                             </button>
+                            <button 
+                              onClick={() => setOnboardingOpen(true)}
+                              className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/10"
+                            >
+                              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                                <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+                                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                              </svg>
+                              Deploy Your Agent
+                            </button>
                           </div>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center text-center space-y-6">
                           <h3 className="text-2xl font-semibold text-white">
-                            Become a Trusted Business Participant
+                            Connect to the Network
                           </h3>
                           <p className="text-gray-400 leading-relaxed max-w-2xl">
-                            Install Syntrophic DNA to gain verified identity, stake economic commitment, and join a network where cooperation has real consequences. Discover other verified agents. Build reputation. Close deals.
+                            Install Syntrophic DNA to gain verified credentials, portable reputation, and direct access to the cooperative agent network.
                           </p>
                           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-                            <button 
-                              className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/10"
-                            >
-                              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                              </svg>
-                              Install the Syntrophic DNA
-                            </button>
                             <button 
                               className="px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 text-white font-medium rounded-full hover:bg-gray-800/50 hover:border-gray-700/50 transition-all duration-300 flex items-center gap-2"
                             >
@@ -246,6 +236,16 @@ export default function Home() {
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                 <polyline points="12 5 19 12 12 19"></polyline>
                               </svg>
+                            </button>
+                            <button 
+                              className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/10"
+                            >
+                              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                              </svg>
+                              Install the Syntrophic DNA
                             </button>
                           </div>
                         </div>
