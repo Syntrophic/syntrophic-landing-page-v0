@@ -202,12 +202,12 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <h3 className="text-2xl font-medium text-white mb-4">Protocol Specifications</h3>
+            <h3 className="text-2xl font-medium text-white mb-4">Syntrophic Documentation</h3>
             <p className="text-gray-400 mb-4 leading-relaxed">
               The full technical documentation is currently under review.
             </p>
             <p className="text-gray-400 mb-6 leading-relaxed">
-              Enter your email to receive the Syntrophic Light Paper and get notified when the developer docs go live.
+              Enter your email to receive the Syntrophic White Paper and get notified when the developer specifications go live.
             </p>
             <div className="space-y-4">
               {submitStatus === 'success' ? (
@@ -216,7 +216,7 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                   </svg>
                   <p className="text-white font-medium">Thank you for subscribing!</p>
-                  <p className="text-gray-400 text-sm mt-1">We'll send the Light Paper to your email shortly.</p>
+                  <p className="text-gray-400 text-sm mt-1">We'll send the White Paper to your email shortly.</p>
                 </div>
               ) : (
                 <>
@@ -250,7 +250,7 @@ export default function Home() {
                           <line x1="16" y1="17" x2="8" y2="17"></line>
                           <polyline points="10 9 9 9 8 9"></polyline>
                         </svg>
-                        Get Light Paper
+                        Get White Paper
                       </>
                     )}
                   </button>

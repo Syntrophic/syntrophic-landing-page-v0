@@ -68,6 +68,118 @@ const initialFormData: FormData = {
   pricingPlan: 'core'
 }
 
+// Selection Card Component - moved outside to prevent recreations
+function SelectionCard({ 
+  icon, 
+  title, 
+  description, 
+  selected, 
+  onClick 
+}: { 
+  icon: React.ReactNode
+  title: string
+  description: string
+  selected: boolean
+  onClick: () => void 
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'relative w-full text-left p-5 rounded-xl border transition-all duration-200 group hover:scale-[1.005] active:scale-[0.995]',
+        selected
+          ? 'bg-white/[0.06] border-white/30 shadow-lg shadow-white/5'
+          : 'bg-gray-900/40 border-gray-800/60 hover:border-gray-700/60 hover:bg-gray-800/30'
+      )}
+    >
+      <div className={cn(
+        'absolute top-4 right-4 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200',
+        selected ? 'bg-white border-white' : 'border-gray-600 group-hover:border-gray-500'
+      )}>
+        {selected && <Check className="w-3 h-3 text-black" />}
+      </div>
+      
+      <div className="flex items-start gap-4">
+        <div className={cn(
+          'flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center transition-colors duration-200',
+          selected ? 'bg-white/10 text-white' : 'bg-gray-800/60 text-gray-400 group-hover:text-gray-300'
+        )}>
+          {icon}
+        </div>
+        <div className="flex-1 min-w-0 pr-8">
+          <h3 className={cn(
+            'text-base font-medium mb-1.5',
+            selected ? 'text-white' : 'text-gray-200'
+          )}>
+            {title}
+          </h3>
+          <p className="text-sm text-gray-500">
+            {description}
+          </p>
+        </div>
+      </div>
+    </button>
+  )
+}
+
+// Input Field Component - moved outside to prevent recreations
+function InputField({ 
+  label, 
+  value, 
+  onChange, 
+  placeholder,
+  type = 'text',
+  rows,
+  minLength,
+  maxLength
+}: { 
+  label: string
+  value: string
+  onChange: (val: string) => void
+  placeholder?: string
+  type?: string
+  rows?: number
+  minLength?: number
+  maxLength?: number
+}) {
+  const showCounter = minLength || maxLength
+  
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <label className="block text-sm font-medium text-gray-300">
+          {label}
+        </label>
+        {showCounter && (
+          <span className="text-xs text-gray-500">
+            {value.length}/{minLength || 0}-{maxLength || '∞'} chars
+          </span>
+        )}
+      </div>
+      {rows ? (
+        <textarea
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          rows={rows}
+          maxLength={maxLength}
+          className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200 resize-none"
+        />
+      ) : (
+        <input
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200"
+        />
+      )}
+    </div>
+  )
+}
+
 export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>(initialFormData)
@@ -90,11 +202,11 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
         return !!formData.role
       case 4:
         if (formData.role === 'founder') {
-          return formData.uniqueValueProposition.length >= 10 && formData.currentTraction.length >= 10
+          return formData.uniqueValueProposition.length >= 20 && formData.currentTraction.length >= 20
         } else if (formData.role === 'investor') {
-          return formData.sectorsAndGeographies.length >= 10 && formData.checkSizeAndStage.length >= 10
+          return formData.sectorsAndGeographies.length >= 20 && formData.checkSizeAndStage.length >= 20
         }
-        return formData.idealClient.length >= 10 && formData.servicesOffered.length >= 10
+        return formData.idealClient.length >= 20 && formData.servicesOffered.length >= 20
       case 5:
         return !!formData.deployment
       case 6:
@@ -223,31 +335,51 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
     </button>
   )
 
-  const InputField = ({ 
-    label, 
-    value, 
-    onChange, 
-    placeholder,
-    type = 'text',
-    rows
-  }: { 
-    label: string
-    value: string
-    onChange: (val: string) => void
-    placeholder?: string
-    type?: string
-    rows?: number
-  }) => (
+// Input Field Component - moved outside to prevent recreations
+function InputField({ 
+  label, 
+  value, 
+  onChange, 
+  placeholder,
+  type = 'text',
+  rows,
+  minLength,
+  maxLength
+}: { 
+  label: string
+  value: string
+  onChange: (val: string) => void
+  placeholder?: string
+  type?: string
+  rows?: number
+  minLength?: number
+  maxLength?: number
+}) {
+  const charCount = value.length
+  const showCounter = (minLength || maxLength) && rows
+  
+  return (
     <div>
-      <label className="block text-sm font-medium text-gray-300 mb-2">
-        {label}
-      </label>
+      <div className="flex items-center justify-between mb-2">
+        <label className="block text-sm font-medium text-gray-300">
+          {label}
+        </label>
+        {showCounter && (
+          <span className={cn(
+            'text-xs font-mono',
+            minLength && charCount < minLength ? 'text-gray-600' : 'text-gray-500'
+          )}>
+            {charCount}{minLength && `/${minLength}`}
+          </span>
+        )}
+      </div>
       {rows ? (
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           rows={rows}
+          maxLength={maxLength}
           className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200 resize-none"
         />
       ) : (
@@ -256,11 +388,13 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
+          maxLength={maxLength}
           className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200"
         />
       )}
     </div>
   )
+}
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -315,7 +449,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                 <SelectionCard
                   icon={<Building2 className="w-6 h-6" />}
                   title="Organization"
-                  description="Deploy agents across your organization"
+                  description="Deploy agents representing your organization"
                   selected={formData.accountType === 'organization'}
                   onClick={() => updateForm({ accountType: 'organization' })}
                 />
@@ -393,21 +527,21 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                 <SelectionCard
                   icon={<Rocket className="w-6 h-6" />}
                   title="Founder"
-                  description="Building AI products and services"
+                  description="Startup founders building products and raising capital"
                   selected={formData.role === 'founder'}
                   onClick={() => updateForm({ role: 'founder' })}
                 />
                 <SelectionCard
                   icon={<TrendingUp className="w-6 h-6" />}
                   title="Investor"
-                  description="Evaluating AI infrastructure"
+                  description="VCs and Angels scouting deals and deploying capital"
                   selected={formData.role === 'investor'}
                   onClick={() => updateForm({ role: 'investor' })}
                 />
                 <SelectionCard
                   icon={<Briefcase className="w-6 h-6" />}
                   title="Service Partner"
-                  description="Offering AI solutions to clients"
+                  description="Providing professional services and solutions"
                   selected={formData.role === 'service-partner'}
                   onClick={() => updateForm({ role: 'service-partner' })}
                 />
@@ -435,6 +569,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       onChange={(val) => updateForm({ uniqueValueProposition: val })}
                       placeholder="Describe what makes your AI product unique..."
                       rows={3}
+                      minLength={20}
                     />
                     <InputField
                       label="What's your current traction?"
@@ -442,6 +577,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       onChange={(val) => updateForm({ currentTraction: val })}
                       placeholder="Users, revenue, partnerships, or other metrics..."
                       rows={3}
+                      minLength={20}
                     />
                   </>
                 )}
@@ -453,6 +589,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       onChange={(val) => updateForm({ sectorsAndGeographies: val })}
                       placeholder="e.g., Healthcare in US/EU, B2B SaaS in Asia..."
                       rows={3}
+                      minLength={20}
                     />
                     <InputField
                       label="Check Size & Stage Preference"
@@ -460,6 +597,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       onChange={(val) => updateForm({ checkSizeAndStage: val })}
                       placeholder="e.g., Seed-Series A, $500K-$5M checks..."
                       rows={3}
+                      minLength={20}
                     />
                   </>
                 )}
@@ -471,6 +609,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       onChange={(val) => updateForm({ idealClient: val })}
                       placeholder="Enterprise companies, mid-market, startups..."
                       rows={3}
+                      minLength={20}
                     />
                     <InputField
                       label="What services do you offer?"
@@ -478,6 +617,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                       onChange={(val) => updateForm({ servicesOffered: val })}
                       placeholder="Consulting, custom implementation, managed services..."
                       rows={3}
+                      minLength={20}
                     />
                   </>
                 )}
