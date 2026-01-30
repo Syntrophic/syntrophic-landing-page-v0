@@ -354,8 +354,8 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
       setStep(8)
       setIsSubmitting(false)
       
-      // Animate progress bar over 2 seconds
-      const duration = 2000
+      // Animate progress bar over 3 seconds
+      const duration = 3000
       const interval = 20
       const increment = 100 / (duration / interval)
       
