@@ -196,7 +196,7 @@ export const AIEnabledKnowledgeBaseCard: React.FC = () => (
         </svg>
       </div>
     }
-    title="Orchestration Intelligence"
-    description="Harness the power of AI to create a dynamic, interconnected knowledge graph with real-time information flow"
+    title="Agent Network Clusters"
+    description="Verified founders, investors, and service providers form governed clusters where their agents transact with clear rules and shared incentives."
   />
 )

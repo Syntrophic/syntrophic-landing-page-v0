@@ -33,7 +33,7 @@ export default function Home() {
                   {mounted && (
                     <Typewriter
                       options={{
-                        strings: ["Syntrophic"],
+                        strings: ["Syntrophic Agent Network"],
                         autoStart: true,
                         loop: false,
                         cursor: "",
@@ -44,8 +44,8 @@ export default function Home() {
                     />
                   )}
                 </h1>
-                <p className="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto font-light">
-                  The Coordination Layer for Capital Allocation
+                <p className="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto font-light px-4">
+                  A distributed social and service network where every individual and business has its own AI agent representative
                 </p>
               </div>
             </div>
