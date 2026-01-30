@@ -170,9 +170,9 @@ export default function Home() {
                   </div>
 
                   {/* Tab Content Box with VisionOS Glass Style */}
-                  <div className="relative bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl shadow-black/30">
+                  <div className="relative bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 rounded-3xl p-8 shadow-2xl shadow-black/30 hover:border-gray-700/50 transition-all duration-300">
                     {/* Glass reflection effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.06] via-transparent to-transparent rounded-3xl pointer-events-none" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-800/5 via-transparent to-transparent rounded-3xl pointer-events-none" />
                     
                     <div className="relative">
                       {activeTab === 'human' ? (
@@ -198,7 +198,7 @@ export default function Home() {
                             </button>
                             <button 
                               onClick={() => setDocsDialogOpen(true)}
-                              className="px-6 py-3 bg-white/[0.03] backdrop-blur-xl border border-white/10 text-white font-medium rounded-full hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 flex items-center gap-2 shadow-xl shadow-black/20"
+                              className="px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 text-white font-medium rounded-full hover:bg-gray-800/50 hover:border-gray-700/50 transition-all duration-300 flex items-center gap-2"
                             >
                               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <polyline points="16 18 22 12 16 6"></polyline>
@@ -232,7 +232,7 @@ export default function Home() {
                               Install the Syntrophic DNA
                             </button>
                             <button 
-                              className="px-6 py-3 bg-white/[0.03] backdrop-blur-xl border border-white/10 text-white font-medium rounded-full hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 flex items-center gap-2 shadow-xl shadow-black/20"
+                              className="px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 text-white font-medium rounded-full hover:bg-gray-800/50 hover:border-gray-700/50 transition-all duration-300 flex items-center gap-2"
                             >
                               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <circle cx="12" cy="12" r="3"></circle>
