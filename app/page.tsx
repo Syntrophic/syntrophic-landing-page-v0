@@ -29,7 +29,7 @@ export default function Home() {
             <div className="relative">
               <div className="inline-block">
                 <img src="/logo.png" alt="Syntrophic Logo" className="h-56 w-56 mx-auto mb-4 object-contain" />
-                <h1 className="relative text-5xl md:text-7xl font-medium mb-8 tracking-tight text-white text-glow">
+                <h1 className="relative text-4xl md:text-5xl font-medium mb-8 tracking-tight text-white text-glow">
                   {mounted && (
                     <Typewriter
                       options={{
