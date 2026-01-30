@@ -180,6 +180,61 @@ function InputField({
   )
 }
 
+// Selection Card Component - defined outside to prevent re-creation on render
+function SelectionCard({ 
+  icon, 
+  title, 
+  description, 
+  selected, 
+  onClick 
+}: { 
+  icon: React.ReactNode
+  title: string
+  description: string
+  selected: boolean
+  onClick: () => void 
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        'relative w-full text-left p-5 rounded-xl border transition-all duration-200 group hover:scale-[1.005] active:scale-[0.995]',
+        selected
+          ? 'bg-white/[0.06] border-white/30 shadow-lg shadow-white/5'
+          : 'bg-gray-900/40 border-gray-800/60 hover:border-gray-700/60 hover:bg-gray-800/30'
+      )}
+    >
+      <div className={cn(
+        'absolute top-4 right-4 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200',
+        selected ? 'bg-white border-white' : 'border-gray-600 group-hover:border-gray-500'
+      )}>
+        {selected && <Check className="w-3 h-3 text-black" />}
+      </div>
+      
+      <div className="flex items-start gap-4">
+        <div className={cn(
+          'flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center transition-colors duration-200',
+          selected ? 'bg-white/10 text-white' : 'bg-gray-800/60 text-gray-400 group-hover:text-gray-300'
+        )}>
+          {icon}
+        </div>
+        <div className="flex-1 min-w-0 pr-8">
+          <h3 className={cn(
+            'text-base font-medium mb-1.5',
+            selected ? 'text-white' : 'text-gray-200'
+          )}>
+            {title}
+          </h3>
+          <p className="text-sm text-gray-500">
+            {description}
+          </p>
+        </div>
+      </div>
+    </button>
+  )
+}
+
 export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>(initialFormData)
@@ -281,120 +336,6 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
       setIsSubmitting(false)
     }
   }
-
-  // Selection Card Component
-  const SelectionCard = ({ 
-    icon, 
-    title, 
-    description, 
-    selected, 
-    onClick 
-  }: { 
-    icon: React.ReactNode
-    title: string
-    description: string
-    selected: boolean
-    onClick: () => void 
-  }) => (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        'relative w-full text-left p-5 rounded-xl border transition-all duration-200 group hover:scale-[1.005] active:scale-[0.995]',
-        selected
-          ? 'bg-white/[0.06] border-white/30 shadow-lg shadow-white/5'
-          : 'bg-gray-900/40 border-gray-800/60 hover:border-gray-700/60 hover:bg-gray-800/30'
-      )}
-    >
-      <div className={cn(
-        'absolute top-4 right-4 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200',
-        selected ? 'bg-white border-white' : 'border-gray-600 group-hover:border-gray-500'
-      )}>
-        {selected && <Check className="w-3 h-3 text-black" />}
-      </div>
-      
-      <div className="flex items-start gap-4">
-        <div className={cn(
-          'flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center transition-colors duration-200',
-          selected ? 'bg-white/10 text-white' : 'bg-gray-800/60 text-gray-400 group-hover:text-gray-300'
-        )}>
-          {icon}
-        </div>
-        <div className="flex-1 min-w-0 pr-8">
-          <h3 className={cn(
-            'text-base font-medium mb-1.5',
-            selected ? 'text-white' : 'text-gray-200'
-          )}>
-            {title}
-          </h3>
-          <p className="text-sm text-gray-500">
-            {description}
-          </p>
-        </div>
-      </div>
-    </button>
-  )
-
-// Input Field Component - moved outside to prevent recreations
-function InputField({ 
-  label, 
-  value, 
-  onChange, 
-  placeholder,
-  type = 'text',
-  rows,
-  minLength,
-  maxLength
-}: { 
-  label: string
-  value: string
-  onChange: (val: string) => void
-  placeholder?: string
-  type?: string
-  rows?: number
-  minLength?: number
-  maxLength?: number
-}) {
-  const charCount = value.length
-  const showCounter = (minLength || maxLength) && rows
-  
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-2">
-        <label className="block text-sm font-medium text-gray-300">
-          {label}
-        </label>
-        {showCounter && (
-          <span className={cn(
-            'text-xs font-mono',
-            minLength && charCount < minLength ? 'text-gray-600' : 'text-gray-500'
-          )}>
-            {charCount}{minLength && `/${minLength}`}
-          </span>
-        )}
-      </div>
-      {rows ? (
-        <textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          rows={rows}
-          maxLength={maxLength}
-          className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200 resize-none"
-        />
-      ) : (
-        <input
-          type={type}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          maxLength={maxLength}
-          className="w-full px-4 py-3 bg-gray-900/60 border border-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-gray-700 transition-all duration-200"
-        />
-      )}
-    </div>
-  )
-}
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
