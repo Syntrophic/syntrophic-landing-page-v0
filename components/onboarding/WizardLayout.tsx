@@ -1,8 +1,8 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
 import { useOnboardingStore } from '@/lib/onboarding-store'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { useState } from 'react'
 
 interface WizardLayoutProps {
   children: React.ReactNode
@@ -19,35 +19,34 @@ export function WizardLayout({ children, onComplete }: WizardLayoutProps) {
     isSubmitting 
   } = useOnboardingStore()
   
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  
   const isValid = validateCurrentStep()
   const isLastStep = currentStep === totalSteps - 1 // Step 7 is the last before submission
   const isStatusStep = currentStep === totalSteps // Step 8 is the status screen
   
   const handleNext = () => {
-    if (isValid) {
+    if (isValid && !isTransitioning) {
+      setIsTransitioning(true)
       if (isLastStep && onComplete) {
         onComplete()
       } else {
         nextStep()
       }
+      setTimeout(() => setIsTransitioning(false), 300)
     }
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+      <div 
+        className="absolute inset-0 bg-black/90 backdrop-blur-xl opacity-100 transition-opacity duration-300"
       />
       
       {/* Modal Container */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="relative w-full max-w-2xl mx-4 bg-gradient-to-b from-gray-900/95 to-gray-950/95 border border-gray-800/60 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden"
+      <div 
+        className="relative w-full max-w-2xl mx-4 bg-gradient-to-b from-gray-900/95 to-gray-950/95 border border-gray-800/60 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden opacity-100 scale-100 translate-y-0 transition-all duration-300"
       >
         {/* Glass reflection effect */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-transparent pointer-events-none" />
@@ -63,28 +62,20 @@ export function WizardLayout({ children, onComplete }: WizardLayoutProps) {
             </span>
           </div>
           <div className="h-0.5 bg-gray-800 rounded-full overflow-hidden">
-            <motion.div 
-              className="h-full bg-gradient-to-r from-white/70 to-white/40"
-              initial={{ width: 0 }}
-              animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
+            <div 
+              className="h-full bg-gradient-to-r from-white/70 to-white/40 transition-all duration-400 ease-out"
+              style={{ width: `${(currentStep / totalSteps) * 100}%` }}
             />
           </div>
         </div>
         
         {/* Content Area */}
         <div className="relative px-8 py-6 min-h-[400px]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.25, ease: 'easeOut' }}
-            >
-              {children}
-            </motion.div>
-          </AnimatePresence>
+          <div
+            className={`transition-all duration-300 ${isTransitioning ? 'opacity-50 scale-95' : 'opacity-100 scale-100'}`}
+          >
+            {children}
+          </div>
         </div>
         
         {/* Navigation Footer */}
@@ -101,7 +92,7 @@ export function WizardLayout({ children, onComplete }: WizardLayoutProps) {
             
             <button
               onClick={handleNext}
-              disabled={!isValid || isSubmitting}
+              disabled={!isValid || isSubmitting || isTransitioning}
               className="flex items-center gap-2 px-6 py-2.5 text-sm font-medium bg-white text-black rounded-full hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             >
               {isSubmitting ? (
@@ -121,7 +112,7 @@ export function WizardLayout({ children, onComplete }: WizardLayoutProps) {
             </button>
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   )
 }

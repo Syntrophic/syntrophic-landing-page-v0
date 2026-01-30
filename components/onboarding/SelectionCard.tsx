@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 interface SelectionCardProps {
@@ -21,12 +20,10 @@ export function SelectionCard({
   variant = 'large'
 }: SelectionCardProps) {
   return (
-    <motion.button
+    <button
       onClick={onClick}
-      whileHover={{ scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
       className={cn(
-        'relative w-full text-left rounded-xl border transition-all duration-200 overflow-hidden group',
+        'relative w-full text-left rounded-xl border transition-all duration-200 overflow-hidden group hover:scale-[1.01] active:scale-[0.99]',
         variant === 'large' && 'p-6',
         variant === 'medium' && 'p-5',
         variant === 'small' && 'p-4',
@@ -37,12 +34,8 @@ export function SelectionCard({
     >
       {/* Selected indicator glow */}
       {selected && (
-        <motion.div
-          layoutId="selection-glow"
-          className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-transparent pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.2 }}
+        <div
+          className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-transparent pointer-events-none opacity-100 transition-opacity duration-200"
         />
       )}
       
@@ -54,10 +47,8 @@ export function SelectionCard({
           : 'border-gray-600 group-hover:border-gray-500'
       )}>
         {selected && (
-          <motion.svg
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="w-3 h-3 text-black"
+          <svg
+            className="w-3 h-3 text-black scale-100 transition-transform duration-200"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -66,7 +57,7 @@ export function SelectionCard({
             strokeLinejoin="round"
           >
             <polyline points="20 6 9 17 4 12" />
-          </motion.svg>
+          </svg>
         )}
       </div>
       
@@ -104,6 +95,6 @@ export function SelectionCard({
           </p>
         </div>
       </div>
-    </motion.button>
+    </button>
   )
 }
