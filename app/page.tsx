@@ -16,6 +16,7 @@ export default function Home() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [titleComplete, setTitleComplete] = useState(false)
   const [subtitleComplete, setSubtitleComplete] = useState(false)
+  const [activeTab, setActiveTab] = useState<'human' | 'agent'>('human')
 
   const handleEmailSubmit = async () => {
     if (!email || isSubmitting) return
@@ -110,33 +111,124 @@ export default function Home() {
                     />
                   )}
                 </div>
-                <div className={`mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-700 ${subtitleComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                  <button 
-                    onClick={() => setOnboardingOpen(true)}
-                    className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2"
-                  >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
-                      <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
-                      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
-                      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
-                    </svg>
-                    Deploy Your Agent
-                  </button>
-                  <button 
-                    onClick={() => setDocsDialogOpen(true)}
-                    className="px-6 py-3 bg-gray-900/80 border border-gray-800/50 text-white font-medium rounded-full hover:bg-gray-800/80 hover:border-gray-700/50 transition-all duration-300 flex items-center gap-2 backdrop-blur-sm"
-                  >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="16 18 22 12 16 6"></polyline>
-                      <polyline points="8 6 2 12 8 18"></polyline>
-                    </svg>
-                    View Documentation
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                  </button>
+                <div className={`mt-10 flex flex-col items-center justify-center gap-6 transition-all duration-700 ${subtitleComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                  {/* VisionOS-style Tab Switcher */}
+                  <div className="relative bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-full p-1 shadow-2xl shadow-black/20">
+                    {/* Glass reflection effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-transparent rounded-full pointer-events-none" />
+                    
+                    <div className="relative flex items-center gap-1">
+                      <button
+                        onClick={() => setActiveTab('human')}
+                        className={`relative px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 ${
+                          activeTab === 'human'
+                            ? 'text-black'
+                            : 'text-white/60 hover:text-white/80'
+                        }`}
+                      >
+                        {activeTab === 'human' && (
+                          <div className="absolute inset-0 bg-white rounded-full shadow-lg shadow-white/20 -z-10" />
+                        )}
+                        <span className="relative z-10 flex items-center gap-2">
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                          </svg>
+                          I'm a Human
+                        </span>
+                      </button>
+                      <button
+                        onClick={() => setActiveTab('agent')}
+                        className={`relative px-6 py-2.5 text-sm font-medium rounded-full transition-all duration-300 ${
+                          activeTab === 'agent'
+                            ? 'text-black'
+                            : 'text-white/60 hover:text-white/80'
+                        }`}
+                      >
+                        {activeTab === 'agent' && (
+                          <div className="absolute inset-0 bg-white rounded-full shadow-lg shadow-white/20 -z-10" />
+                        )}
+                        <span className="relative z-10 flex items-center gap-2">
+                          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                            <rect x="9" y="9" width="6" height="6"></rect>
+                            <line x1="9" y1="1" x2="9" y2="4"></line>
+                            <line x1="15" y1="1" x2="15" y2="4"></line>
+                            <line x1="9" y1="20" x2="9" y2="23"></line>
+                            <line x1="15" y1="20" x2="15" y2="23"></line>
+                            <line x1="20" y1="9" x2="23" y2="9"></line>
+                            <line x1="20" y1="14" x2="23" y2="14"></line>
+                            <line x1="1" y1="9" x2="4" y2="9"></line>
+                            <line x1="1" y1="14" x2="4" y2="14"></line>
+                          </svg>
+                          I'm an Agent
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* CTA Buttons based on active tab */}
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 min-h-[52px]">
+                    {activeTab === 'human' ? (
+                      <>
+                        <button 
+                          onClick={() => setOnboardingOpen(true)}
+                          className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/10"
+                        >
+                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path>
+                            <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path>
+                            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path>
+                            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path>
+                          </svg>
+                          Deploy Your Agent
+                        </button>
+                        <button 
+                          onClick={() => setDocsDialogOpen(true)}
+                          className="px-6 py-3 bg-white/[0.03] backdrop-blur-xl border border-white/10 text-white font-medium rounded-full hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 flex items-center gap-2 shadow-xl shadow-black/20"
+                        >
+                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                          </svg>
+                          View Documentation
+                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                          </svg>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button 
+                          className="px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/10"
+                        >
+                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                          </svg>
+                          Install the Syntrophic DNA
+                        </button>
+                        <button 
+                          className="px-6 py-3 bg-white/[0.03] backdrop-blur-xl border border-white/10 text-white font-medium rounded-full hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 flex items-center gap-2 shadow-xl shadow-black/20"
+                        >
+                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 1v6m0 6v6"></path>
+                            <path d="m4.2 4.2 4.2 4.2m5.6 5.6 4.2 4.2"></path>
+                            <path d="M1 12h6m6 0h6"></path>
+                            <path d="m4.2 19.8 4.2-4.2m5.6-5.6 4.2-4.2"></path>
+                          </svg>
+                          Join a Cluster
+                          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                          </svg>
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
