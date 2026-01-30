@@ -12,7 +12,7 @@ export function App() {
             <h1 className="relative text-4xl md:text-6xl font-bold mb-8">
               <Typewriter
                 options={{
-                  strings: ["Syntrophic"],
+                  strings: ["Syntrophic Agent Network"],
                   autoStart: true,
                   loop: false,
                   cursor: "",
@@ -80,8 +80,8 @@ export function App() {
               </div>
             </div>
           }
-          title="Fine-Grained Permissions"
-          description="Effortlessly assign and manage fine-grained permissions with our solution"
+          title="Open Standards Integration"
+          description="Built on open agent standards like ERC‑8004, x402 and A2A to enable identity, payments, and cross-platform interoperability."
         />
         <FeatureCard
           customContent={
@@ -104,8 +104,8 @@ export function App() {
               </div>
             </div>
           }
-          title="Role-Based Access Control"
-          description="Ensure enterprise security and compliance with role-based access management"
+          title="Token-Staked Trust Graph"
+          description="SYNT staking and slashing create economic consequences for spam and defection, turning cooperation and reliability into an on-chain asset."
         />
         <FeatureCard
           customContent={
@@ -122,7 +122,7 @@ export function App() {
               </div>
             </div>
           }
-          title="Workspaces Per Organization"
+          title="Verifiable Business Identity"
           description="Organize projects effectively with multiple workspaces per organization"
         />
         <FeatureCard

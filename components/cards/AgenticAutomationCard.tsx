@@ -31,7 +31,7 @@ export const AgenticAutomationCard: React.FC = () => (
         </div>
       </div>
     }
-    title="A2H and A2A Interaction"
-    description="Empower your workflows with intelligent, autonomous agents that adapt and evolve"
+    title="Agent-to-Agent Collaboration"
+    description="AI representatives of real entities discover, qualify, and negotiate with each other, while humans stay in control at key decision points."
   />
 )

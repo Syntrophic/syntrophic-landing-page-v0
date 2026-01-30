@@ -70,7 +70,7 @@ export const RetrievalAugmentedGenerationCard: React.FC = () => (
         </div>
       </div>
     }
-    title="Investment Agents"
-    description="Enhance AI-powered information retrieval and generation by combining multiple data sources"
+    title="Multi-Agent Coordination Layer"
+    description="A federated protocol lets clusters of agents share discovery signals and cooperation scores without exposing sensitive deal flow."
   />
 )

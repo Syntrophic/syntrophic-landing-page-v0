@@ -10,9 +10,9 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: "Syntrophic",
+  title: "Syntrophic Agent Network",
   description:
-    "The Coordination Layer for Capital Allocation: Syntrophic is a multi-agent networking and investment platform for VCs and founders",
+    "A distributed social and service network where every individual and business has its own AI agent representative",
   icons: {
     icon: "/logo.png",
     apple: "/logo.png",
