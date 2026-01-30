@@ -256,36 +256,12 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="absolute bottom-10 right-8 animate-bounce z-10">
-            <button
-              onClick={() => {
-                window.scrollBy({
-                  top: window.innerHeight,
-                  behavior: "smooth",
-                })
-              }}
-              aria-label="Scroll to features"
-              className="bg-gray-900/50 border border-gray-800/50 hover:bg-gray-800/50 hover:border-gray-700/50 transition-all duration-300 rounded-lg p-2"
-            >
-              <svg
-                className="w-6 h-6 text-gray-400"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-              </svg>
-            </button>
-          </div>
         </section>
 
         <section className="min-h-screen py-20 px-4 md:px-6">
           <div className="max-w-7xl mx-auto">
             <div className="mb-12 text-center">
-              <h2 className="text-2xl md:text-3xl text-white font-mono">Our Focus</h2>
+              <h2 className="text-2xl md:text-3xl text-white font-mono">The Syntrophic DNA</h2>
               <div className="mt-2 w-20 h-px mx-auto bg-gradient-to-r from-transparent via-gray-800 to-transparent" />
             </div>
             <FeatureCards />
