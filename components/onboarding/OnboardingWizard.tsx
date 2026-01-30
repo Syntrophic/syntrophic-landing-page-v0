@@ -184,6 +184,8 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [confirmationProgress, setConfirmationProgress] = useState(0)
+  const [showSuccess, setShowSuccess] = useState(false)
 
   const updateForm = (updates: Partial<FormData>) => {
     setFormData(prev => ({ ...prev, ...updates }))
@@ -274,10 +276,28 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
         body: JSON.stringify(submitData),
       })
       setStep(8)
+      setIsSubmitting(false)
+      
+      // Animate progress bar over 2 seconds
+      const duration = 2000
+      const interval = 20
+      const increment = 100 / (duration / interval)
+      
+      const timer = setInterval(() => {
+        setConfirmationProgress(prev => {
+          const next = prev + increment
+          if (next >= 100) {
+            clearInterval(timer)
+            setShowSuccess(true)
+            return 100
+          }
+          return next
+        })
+      }, interval)
     } catch (error) {
       console.error('Submission error:', error)
       setStep(8)
-    } finally {
+      setShowSuccess(true)
       setIsSubmitting(false)
     }
   }
@@ -301,16 +321,16 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
         <div className="relative px-8 pt-6 pb-4 border-b border-gray-800/40">
           <div className="flex items-center justify-between mb-3">
             <span className="text-sm text-gray-500 font-mono">
-              Step {step} of 7
+              Step {step} of 8
             </span>
             <span className="text-sm text-gray-600 font-mono">
-              {Math.round((step / 7) * 100)}%
+              {Math.round((step / 8) * 100)}%
             </span>
           </div>
           <div className="h-0.5 bg-gray-800 rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-white/70 to-white/40 transition-all duration-400"
-              style={{ width: `${(step / 7) * 100}%` }}
+              style={{ width: `${(step / 8) * 100}%` }}
             />
           </div>
         </div>
@@ -426,7 +446,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
                 />
                 <SelectionCard
                   icon={<Briefcase className="w-6 h-6" />}
-                  title="Service Partner"
+                  title="Service Provider"
                   description="Providing professional services and solutions"
                   selected={formData.role === 'service-partner'}
                   onClick={() => updateForm({ role: 'service-partner' })}
@@ -596,21 +616,62 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
             </div>
           )}
 
-          {/* Step 8: Complete */}
+          {/* Step 8: Confirmation & Complete */}
           {step === 8 && (
-            <div className="flex flex-col items-center justify-center min-h-[400px] py-8">
-              <div className="mb-6">
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-full flex items-center justify-center">
-                  <Check className="w-10 h-10 text-white" />
-                </div>
-              </div>
-              <h2 className="text-3xl font-semibold text-white mb-4 text-center">Request Submitted!</h2>
-              <p className="text-gray-400 text-center max-w-sm mb-2">
-                Your agent deployment request has been queued for priority verification.
-              </p>
-              <p className="text-gray-500 text-center text-sm max-w-sm">
-                We'll reach out within 24-48 hours to confirm your setup and get you running.
-              </p>
+            <div className="flex flex-col items-center justify-center min-h-[400px] py-12">
+              {!showSuccess ? (
+                <>
+                  {/* Agent Icon with subtle animation */}
+                  <div className="mb-8">
+                    <div className="relative w-24 h-24 mx-auto">
+                      {/* Outer ring pulse */}
+                      <div className="absolute inset-0 bg-white/5 rounded-full animate-ping" style={{ animationDuration: '2s' }} />
+                      {/* Static outer ring */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-full" />
+                      {/* Inner icon */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <img 
+                          src="/robots.png" 
+                          alt="Agent" 
+                          className="w-16 h-16 object-contain opacity-90"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Processing text */}
+                  <h2 className="text-2xl font-medium text-white mb-3 text-center">Submitting Request</h2>
+                  <p className="text-gray-400 text-center text-sm mb-8 max-w-xs">
+                    Configuring your agent deployment...
+                  </p>
+                  
+                  {/* Progress bar - Apple style */}
+                  <div className="w-full max-w-xs">
+                    <div className="h-1 bg-gray-800/60 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-white rounded-full transition-all duration-75 ease-linear"
+                        style={{ width: `${confirmationProgress}%` }}
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Success state */}
+                  <div className="mb-8">
+                    <div className="w-20 h-20 mx-auto bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-full flex items-center justify-center">
+                      <Check className="w-10 h-10 text-white" />
+                    </div>
+                  </div>
+                  <h2 className="text-2xl font-medium text-white mb-3 text-center">Request Submitted</h2>
+                  <p className="text-gray-400 text-center max-w-sm mb-2 leading-relaxed">
+                    Your agent deployment request has been queued for priority verification.
+                  </p>
+                  <p className="text-gray-500 text-center text-sm max-w-sm leading-relaxed">
+                    We'll reach out within 24-48 hours to confirm your setup and get you running.
+                  </p>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -651,7 +712,7 @@ export function OnboardingWizard({ onClose }: OnboardingWizardProps) {
         )}
 
         {/* Close button */}
-        {step === 8 && (
+        {step === 8 && showSuccess && (
           <div className="relative px-8 pb-6 pt-4 flex items-center justify-center border-t border-gray-800/40">
             <button
               onClick={onClose}
