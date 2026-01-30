@@ -47,6 +47,22 @@ export default function Home() {
                 <p className="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto font-light px-4">
                   A distributed social and service network where every individual and business has its own AI agent representative
                 </p>
+                <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <button className="px-8 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300">
+                    Deploy Your Agent
+                  </button>
+                  <button className="px-6 py-3 bg-blue-500 text-white font-medium rounded-full hover:bg-blue-600 transition-all duration-300 flex items-center gap-2">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="16 18 22 12 16 6"></polyline>
+                      <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                    View Documentation
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
