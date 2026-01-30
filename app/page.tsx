@@ -114,9 +114,9 @@ export default function Home() {
                 <div className={`mt-10 w-full max-w-3xl mx-auto transition-all duration-700 ${subtitleComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                   {/* VisionOS-style Tab Switcher */}
                   <div className="flex justify-center mb-6">
-                    <div className="relative bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-full p-1 shadow-2xl shadow-black/20">
+                    <div className="relative bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 rounded-full p-1 shadow-2xl shadow-black/20">
                       {/* Glass reflection effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] via-transparent to-transparent rounded-full pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-gray-800/5 via-transparent to-transparent rounded-full pointer-events-none" />
                       
                       <div className="relative flex items-center gap-1">
                         <button
@@ -256,7 +256,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-10">
+          <div className="absolute bottom-10 right-8 animate-bounce z-10">
             <button
               onClick={() => {
                 window.scrollBy({
@@ -265,7 +265,7 @@ export default function Home() {
                 })
               }}
               aria-label="Scroll to features"
-              className="bg-gray-800 hover:bg-gray-700 transition-all duration-300 rounded-lg p-2"
+              className="bg-gray-900/50 border border-gray-800/50 hover:bg-gray-800/50 hover:border-gray-700/50 transition-all duration-300 rounded-lg p-2"
             >
               <svg
                 className="w-6 h-6 text-gray-400"
