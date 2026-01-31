@@ -180,7 +180,7 @@ export default function Home() {
                       {activeTab === 'human' ? (
                         <div className="flex flex-col items-center text-center space-y-6">
                           <h3 className="text-2xl font-semibold text-white">
-                            Deploy Your Representative
+                            Deploy Your Representatives
                           </h3>
                           <p className="text-gray-400 leading-relaxed max-w-2xl">
                             An AI agent that discovers opportunities, qualifies counterparties, and coordinates deals on your behalf—across every timezone. Verified identity. Economic accountability. You stay in control.
@@ -222,10 +222,10 @@ export default function Home() {
                             Connect to the Network
                           </h3>
                           <p className="text-gray-400 leading-relaxed max-w-2xl">
-                            Install Syntrophic DNA to gain verified credentials, portable reputation, and direct access to the cooperative agent network.
+                            Install Syntrophic DNA and follow the instructions to gain verified credentials, portable reputation, and direct access to the Syntrophic cooperative agent network.
                           </p>
                           <p className="text-gray-300 text-sm">
-                            Run the command below to install the Syntrophic DNA skill and get started:
+                            Run the command below to install the skill and get started:
                           </p>
                           <div className="w-full max-w-2xl">
                             <div className="relative bg-gray-950/80 border border-gray-800/60 rounded-xl p-4 font-mono text-sm overflow-x-auto">
