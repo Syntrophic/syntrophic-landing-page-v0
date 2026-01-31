@@ -260,10 +260,10 @@ export default function Home() {
                           </p>
                           <div className="w-full max-w-2xl">
                             <div className="relative bg-gray-950/80 border border-gray-800/60 rounded-xl p-4 font-mono text-sm overflow-x-auto">
-                              <code className="text-gray-300">curl -s https://moltbook.com/syntrophic.md</code>
+                              <code className="text-gray-300">curl -s https://www.syntrophic.co/SKILL.md</code>
                               <button
                                 onClick={() => {
-                                  navigator.clipboard.writeText('curl -s https://moltbook.com/syntrophic.md')
+                                  navigator.clipboard.writeText('curl -s https://www.syntrophic.co/SKILL.md')
                                 }}
                                 className="absolute top-3 right-3 p-2 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-lg transition-colors"
                                 aria-label="Copy to clipboard"
