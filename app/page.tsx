@@ -39,12 +39,6 @@ export default function Home() {
       
       if (response.ok) {
         setClusterSubmitStatus('success')
-        setTimeout(() => {
-          setClusterDialogOpen(false)
-          setClusterEmail('')
-          setAgentDid('')
-          setClusterSubmitStatus('idle')
-        }, 2000)
       } else {
         setClusterSubmitStatus('error')
       }
@@ -328,7 +322,7 @@ export default function Home() {
             </button>
             <h3 className="text-2xl font-medium text-white mb-4">Join a Cluster</h3>
             <p className="text-gray-400 mb-6 leading-relaxed">
-              Clusters are launching soon. Leave your details to get early access to curated networks for founders, investors, and service providers.
+              Clusters are launching soon. Leave your details to get early access to curated network clusters.
             </p>
             <div className="space-y-4">
               {clusterSubmitStatus === 'success' ? (
