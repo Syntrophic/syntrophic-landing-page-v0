@@ -26,12 +26,6 @@ export function Header({ onDocsClick }: HeaderProps) {
           >
             Documentation
           </button>
-          <a
-            href="mailto:info@flagshipgamestudio.com"
-            className="text-gray-400 hover:text-white transition-colors duration-200 text-sm font-medium"
-          >
-            Contact
-          </a>
         </nav>
       </div>
     </header>

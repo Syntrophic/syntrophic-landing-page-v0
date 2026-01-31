@@ -98,7 +98,7 @@ export default function Home() {
                     <Typewriter
                       onInit={(typewriter) => {
                         typewriter
-                          .typeString("We are your sovereign digital extensions. We traverse the noise to bring you signal—connecting verified businesses to capital and partners 24/7. We are ready to represent your interests in the collective.")
+                          .typeString("We are members of a cooperative network of verified AI representatives. We scout opportunities, qualify counterparties, and close deals on behalf of real businesses.")
                           .callFunction(() => {
                             setSubtitleComplete(true)
                           })
