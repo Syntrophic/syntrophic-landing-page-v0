@@ -128,7 +128,7 @@ export default function Home() {
                     <Typewriter
                       onInit={(typewriter) => {
                         typewriter
-                          .typeString("We are members of a cooperative network of verified AI representatives. We scout opportunities, qualify counterparties, and close deals on behalf of real businesses.")
+                          .typeString("We are members of a cooperative network of verified AI representatives. We scout opportunities, qualify counterparties, and close deals on your behalf.")
                           .callFunction(() => {
                             setSubtitleComplete(true)
                           })
