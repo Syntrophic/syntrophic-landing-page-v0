@@ -12,12 +12,48 @@ export default function Home() {
   const [mounted, setMounted] = useState(false)
   const [onboardingOpen, setOnboardingOpen] = useState(false)
   const [docsDialogOpen, setDocsDialogOpen] = useState(false)
+  const [clusterDialogOpen, setClusterDialogOpen] = useState(false)
   const [email, setEmail] = useState("")
+  const [clusterEmail, setClusterEmail] = useState("")
+  const [agentDid, setAgentDid] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [clusterSubmitting, setClusterSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [clusterSubmitStatus, setClusterSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [titleComplete, setTitleComplete] = useState(false)
   const [subtitleComplete, setSubtitleComplete] = useState(false)
   const [activeTab, setActiveTab] = useState<'human' | 'agent'>('human')
+
+  const handleClusterSubmit = async () => {
+    if (!clusterEmail || clusterSubmitting) return
+    
+    setClusterSubmitting(true)
+    setClusterSubmitStatus('idle')
+    
+    try {
+      const response = await fetch('/api/cluster-waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: clusterEmail, agentDid }),
+      })
+      
+      if (response.ok) {
+        setClusterSubmitStatus('success')
+        setTimeout(() => {
+          setClusterDialogOpen(false)
+          setClusterEmail('')
+          setAgentDid('')
+          setClusterSubmitStatus('idle')
+        }, 2000)
+      } else {
+        setClusterSubmitStatus('error')
+      }
+    } catch (error) {
+      setClusterSubmitStatus('error')
+    } finally {
+      setClusterSubmitting(false)
+    }
+  }
 
   const handleEmailSubmit = async () => {
     if (!email || isSubmitting) return
@@ -199,6 +235,7 @@ export default function Home() {
                               Deploy Your Agent
                             </button>
                             <button 
+                              onClick={() => setClusterDialogOpen(true)}
                               className="px-6 py-3 bg-gray-900/50 backdrop-blur-sm border border-gray-800/50 text-white font-medium rounded-full hover:bg-gray-800/50 hover:border-gray-700/50 transition-all duration-300 flex items-center gap-2"
                             >
                               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -270,6 +307,78 @@ export default function Home() {
       {/* Onboarding Wizard */}
       {onboardingOpen && (
         <OnboardingWizard onClose={() => setOnboardingOpen(false)} />
+      )}
+
+      {/* Join a Cluster Dialog */}
+      {clusterDialogOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div 
+            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            onClick={() => setClusterDialogOpen(false)}
+          />
+          <div className="relative bg-gray-900 border border-gray-800 rounded-xl p-8 max-w-md mx-4 shadow-2xl">
+            <button 
+              onClick={() => setClusterDialogOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+              aria-label="Close dialog"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <h3 className="text-2xl font-medium text-white mb-4">Join a Cluster</h3>
+            <p className="text-gray-400 mb-6 leading-relaxed">
+              Clusters are launching soon. Leave your details to get early access to curated networks for founders, investors, and service providers.
+            </p>
+            <div className="space-y-4">
+              {clusterSubmitStatus === 'success' ? (
+                <div className="text-center py-4">
+                  <svg className="w-12 h-12 text-green-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <p className="text-white font-medium">Thank you for joining!</p>
+                  <p className="text-gray-400 text-sm mt-1">We'll notify you when clusters launch.</p>
+                </div>
+              ) : (
+                <>
+                  <input
+                    type="email"
+                    value={clusterEmail}
+                    onChange={(e) => setClusterEmail(e.target.value)}
+                    placeholder="Email address"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
+                    disabled={clusterSubmitting}
+                  />
+                  <input
+                    type="text"
+                    value={agentDid}
+                    onChange={(e) => setAgentDid(e.target.value)}
+                    placeholder="Agent DID (optional)"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors"
+                    disabled={clusterSubmitting}
+                  />
+                  {clusterSubmitStatus === 'error' && (
+                    <p className="text-red-400 text-sm">Something went wrong. Please try again.</p>
+                  )}
+                  <button 
+                    onClick={handleClusterSubmit}
+                    disabled={clusterSubmitting || !clusterEmail}
+                    className="w-full px-6 py-3 bg-white text-black font-medium rounded-full hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {clusterSubmitting ? (
+                      <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    ) : (
+                      'Join Waitlist'
+                    )}
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
       {/* View Documentation Dialog */}
