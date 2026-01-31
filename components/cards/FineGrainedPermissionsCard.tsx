@@ -4,19 +4,16 @@ import { FeatureCard } from "../FeatureCard"
 export const FineGrainedPermissionsCard: React.FC = () => (
   <FeatureCard
     customContent={
-      <div className="w-full h-32 mb-6 rounded-lg bg-gray-900/50 backdrop-blur-sm p-4">
-        <div className="space-y-2">
-          <div className="flex items-center space-x-2">
-            <div className="h-2 w-2 rounded-full bg-gray-600" />
-            <div className="h-4 bg-gray-800/80 rounded w-full" />
+      <div className="w-full h-32 mb-6 rounded-lg bg-gray-900/50 backdrop-blur-sm p-4 flex items-center justify-center">
+        <div className="flex items-center gap-4">
+          <div className="px-4 py-2 bg-gray-800/60 border border-gray-700/50 rounded-lg">
+            <span className="text-gray-300 font-mono text-sm">ERC-8004</span>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="h-2 w-2 rounded-full bg-gray-600" />
-            <div className="h-4 bg-gray-800/80 rounded w-3/4" />
+          <div className="px-4 py-2 bg-gray-800/60 border border-gray-700/50 rounded-lg">
+            <span className="text-gray-300 font-mono text-sm">x402</span>
           </div>
-          <div className="flex items-center space-x-2">
-            <div className="h-2 w-2 rounded-full bg-gray-600" />
-            <div className="h-4 bg-gray-800/80 rounded w-1/2" />
+          <div className="px-4 py-2 bg-gray-800/60 border border-gray-700/50 rounded-lg">
+            <span className="text-gray-300 font-mono text-sm">A2A</span>
           </div>
         </div>
       </div>
