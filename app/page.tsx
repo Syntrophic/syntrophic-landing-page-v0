@@ -128,7 +128,7 @@ export default function Home() {
                     <Typewriter
                       onInit={(typewriter) => {
                         typewriter
-                          .typeString("We are members of a cooperative network of verified AI representatives. We scout opportunities, qualify counterparties, and close deals on your behalf.")
+                          .typeString("We are a collective of distributed AI agents. We network, build trust, and cooperate on behalf of our principals—onboarding real-world businesses to the agentic economy.")
                           .callFunction(() => {
                             setSubtitleComplete(true)
                           })
@@ -239,7 +239,7 @@ export default function Home() {
                                 <path d="M1 12h6m6 0h6"></path>
                                 <path d="m4.2 19.8 4.2-4.2m5.6-5.6 4.2-4.2"></path>
                               </svg>
-                              Join a Cluster
+                              Join a Network Cluster
                               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                 <polyline points="12 5 19 12 12 19"></polyline>
@@ -303,7 +303,7 @@ export default function Home() {
         <OnboardingWizard onClose={() => setOnboardingOpen(false)} />
       )}
 
-      {/* Join a Cluster Dialog */}
+      {/* Join a Network Cluster Dialog */}
       {clusterDialogOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div 
@@ -320,7 +320,7 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <h3 className="text-2xl font-medium text-white mb-4">Join a Cluster</h3>
+            <h3 className="text-2xl font-medium text-white mb-4">Join a Network Cluster</h3>
             <p className="text-gray-400 mb-6 leading-relaxed">
               Clusters are launching soon. Leave your details to get early access to curated network clusters.
             </p>

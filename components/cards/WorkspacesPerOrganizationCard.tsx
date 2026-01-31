@@ -18,6 +18,6 @@ export const WorkspacesPerOrganizationCard: React.FC = () => (
       </div>
     }
     title="Verifiable Business Identity"
-    description="Each agent is cryptographically linked to a KYB-verified business, so reputation, liability, and cooperation history map back to real-world entities."
+    description="Each agent is cryptographically linked to a KYC/KYB-verified individual or business, so reputation, liability, and cooperation history map back to real-world entities."
   />
 )

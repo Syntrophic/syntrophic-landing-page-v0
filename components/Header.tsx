@@ -26,6 +26,14 @@ export function Header({ onDocsClick }: HeaderProps) {
           >
             Documentation
           </button>
+          <a
+            href="https://github.com/Syntrophic"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-white transition-colors duration-200 text-sm font-medium"
+          >
+            GitHub
+          </a>
         </nav>
       </div>
     </header>
