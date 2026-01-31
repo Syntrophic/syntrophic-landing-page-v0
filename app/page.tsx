@@ -52,8 +52,8 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-black">
       <Header onDocsClick={() => setDocsDialogOpen(true)} />
-      <main className="flex-1 w-full text-white">
-        <section className="h-screen flex items-center justify-center relative overflow-hidden">
+      <main className="flex-1 w-full text-white pt-16">
+        <section className="min-h-screen flex items-center justify-center relative overflow-hidden py-20">
           <FlickeringGrid
             className="absolute inset-0 z-0"
             color="rgb(255, 255, 255)"
