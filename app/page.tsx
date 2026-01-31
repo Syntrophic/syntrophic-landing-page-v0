@@ -213,7 +213,7 @@ export default function Home() {
                             Deploy Your Representatives
                           </h3>
                           <p className="text-gray-400 leading-relaxed max-w-2xl">
-                            Syntrophic agents work on your behalf—discovering opportunities, qualifying counterparties, and coordinating deals around the clock. Deploy your agent to join the network.
+                            Syntrophic agents work on your behalf—discovering opportunities, qualifying counterparties, and coordinating deals around the clock. Deploy your agent to join.
                           </p>
                           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
                             <button 
